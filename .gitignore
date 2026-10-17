@@ -1,0 +1,17 @@
+# Local game data and diagnostics
+WTF/
+SavedVariables/
+Logs/
+Errors/
+Screenshots/
+*.log
+*.dmp
+*.lua.bak
+*.zip
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+__pycache__/

@@ -1,0 +1,44 @@
+## Interface: 11200
+## Title: EasyCast
+## Notes: Click casting on existing unit frames. Independent friendly and hostile binding hints.
+## Author: VanCleef
+## Version: 0.7.38-alpha
+## SavedVariablesPerCharacter: EasyCastDB
+## OptionalDeps: DragonflightUI-Reforged, DragonForgeUI, DragonflightUI, ShaguTweaks, EasyThreat
+Core.lua
+Locale.lua
+Locale_frFR.lua
+Locale_esES.lua
+Locale_ptBR.lua
+Locale_ruRU.lua
+Locale_koKR.lua
+Locale_zhCN.lua
+SpellIdentity.lua
+SpellCast.lua
+Actions.lua
+UI.lua
+Widgets.lua
+Frames.lua
+WorldContext.lua
+WorldBindings.lua
+PrimaryWorld.lua
+NativeRun.lua
+World.lua
+WorldHooks.lua
+NativeTooltip.lua
+TipLayout.lua
+Tips.lua
+Probe.lua
+Settings.lua
+Test.lua
+CastDiagnostics.lua
+Range.lua
+SpellStatus.lua
+WorldTrace.lua
+ClickTest.lua
+MouseTest.lua
+MiniTest.lua
+BindingTest.lua
+RunTest.lua
+Help.lua
+Bootstrap.lua
