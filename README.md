@@ -22,13 +22,25 @@ EasyCast assigns spells and actions to mouse buttons, the mouse wheel and additi
 
 ## Installation
 
-1. Download this repository using **Code → Download ZIP** and extract it.
-2. Copy the enclosed **EasyCast** folder into your game's `Interface/AddOns` directory.
-3. Check that the resulting path is `Interface/AddOns/EasyCast/EasyCast.toc`.
-4. Enable EasyCast on the character-selection screen, then enter the game.
-5. Open settings with **`/ec`** or the minimap icon.
+### OctoWoW Launcher
 
-When updating, close the game and replace the addon folder. Keep your SavedVariables if you want to retain profiles and settings.
+Add this Git URL in the launcher's addon manager:
+
+`https://github.com/edwinvancleef577/EasyCast.git`
+
+Use the capitalization shown above, especially on case-sensitive systems. The repository root contains `EasyCast.toc`, Lua files and `Media/`, so the launcher can clone and update it directly.
+
+If an earlier attempt shows **Failed to install**, close the game, back up your existing addon folder outside `Interface/AddOns`, remove the failed entry in the launcher and add the URL again. Keep the game's `WTF` folder / SavedVariables; they contain your settings. A manually installed copy may need the same one-time replacement before the launcher can manage it.
+
+### Manual ZIP installation
+
+1. Choose **Code → Download ZIP** and extract the archive.
+2. Rename the extracted repository folder (for example `easycast-main`) to **EasyCast**.
+3. Copy that folder into your game's `Interface/AddOns` directory.
+4. Check that the resulting path is `Interface/AddOns/EasyCast/EasyCast.toc`, with no extra nested `EasyCast` folder.
+5. Enable EasyCast on the character-selection screen, then open settings with **`/ec`** or the minimap icon.
+
+When updating manually, close the game and replace the addon folder. Keep your SavedVariables to retain settings.
 
 ## Quick start
 
