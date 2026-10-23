@@ -1,5 +1,5 @@
 -- Independent implementation; no Puppeteer source or artwork is included.
-EasyCast = {version="0.7.39-alpha", frames={}, spells={}, spellList={}, buttons={
+EasyCast = {version="0.7.40-alpha", frames={}, spells={}, spellList={}, buttons={
     {"LeftButton","Links"}, {"RightButton","Rechts"}, {"MiddleButton","Mitte"},
     {"Button4","Maus 4"}, {"Button5","Maus 5"}, {"MOUSEWHEELUP","Rad hoch"}, {"MOUSEWHEELDOWN","Rad runter"}},
     modifiers={"", "SHIFT-", "CTRL-", "ALT-", "CTRL-SHIFT-", "ALT-SHIFT-", "ALT-CTRL-", "ALT-CTRL-SHIFT-"}}
@@ -200,6 +200,7 @@ function E:RefreshSpells()
     self.spellBookRetry=iconsPending and GetTime()+.5 or nil
     self.spellBookRetryCount=iconsPending and (self.spellBookRetryCount or 0)+1 or 0
     self.spellRestrictions={}; self.spellStatusQueue={}; self.spellRangeLimits={}
+    self:InvalidateManaCosts()
     self:RememberSpellIdentities()
     self:MigrateSpellBindings()
     -- SPELLS_CHANGED can follow login/reload. Update question-mark icons without

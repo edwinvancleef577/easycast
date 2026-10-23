@@ -182,7 +182,8 @@ function E:UpdateSettingsPreview()
     for i,entry in ipairs(entries) do
         if i==1 then entry.status={cooldown={start=start,duration=8,remaining=8-math.mod(GetTime(),8)}}
         elseif i==2 then entry.status={invalid=true,reason="RangeUp"}
-        elseif i==3 then entry.status={invalid=true,reason="Self"} end
+        elseif i==3 then entry.status={invalid=true,reason="Self"}
+        elseif i==4 then entry.status={invalid=true,reason="Mana"} end
     end
     local integrated=t.style=="integrated" and not self:HideDefaultTip(self.tipKind); local top=integrated and 43 or 8
     local width,height=self:LayoutBindings(f,entries,t,UIParent:GetWidth()-56,top,10,self.tipPreviewModifier)

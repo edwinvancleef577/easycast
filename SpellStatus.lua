@@ -23,6 +23,7 @@ function E:UpdateSpellMetadata()
     if not key then return end
     self.nextSpellStatusScan=GetTime()+.15; self.spellStatusQueue[key]=nil
     self.spellRestrictions[key]="unknown"
+    self.spellManaCosts[key]=false
     local ok,err=pcall(function()
         if not E.spellStatusTip then E.spellStatusTip=CreateFrame("GameTooltip","EasyCastSpellStatusScan",UIParent,"GameTooltipTemplate") end
         local tip=E.spellStatusTip
@@ -33,6 +34,8 @@ function E:UpdateSpellMetadata()
             local line=getglobal("EasyCastSpellStatusScanText"..side..i)
             local value=line and line:IsShown() and plain(line:GetText())
             if value then
+                local mana=E:ReadManaCost(value)
+                if mana then E.spellManaCosts[key]=mana end
                 local _,_,low,high=string.find(value,"^(%d+)%s*%-%s*(%d+)%s+yd range$")
                 if not low then _,_,low,high=string.find(value,"^(%d+)%s*%-%s*(%d+)%s+m Reichweite$") end
                 if high then E.spellRangeLimits[key]={min=tonumber(low),max=tonumber(high)}
@@ -71,8 +74,9 @@ function E:BindingStatus(value,info,unit,range)
     local selfOnly=kind=="spell" and self:SelfOnlySpell(info) or nil
     local wrongSelf=selfOnly and unit and UnitExists(unit) and not self:SameUnit(unit,"player")
     local limits=info and self.spellRangeLimits[info.cast or info.name]
-    local reason=wrongSelf and "Self" or (range==0 and (limits and limits.min==0 and "RangeUp" or "RangeBoth")) or nil
-    return {cooldown=self:BindingCooldown(value,info),selfOnly=selfOnly,reason=reason,invalid=reason~=nil}
+    local lacksMana=self:BindingLacksMana(value,info)
+    local reason=wrongSelf and "Self" or (range==0 and (limits and limits.min==0 and "RangeUp" or "RangeBoth")) or (lacksMana and "Mana") or nil
+    return {cooldown=self:BindingCooldown(value,info),selfOnly=selfOnly,lacksMana=lacksMana,reason=reason,invalid=reason~=nil}
 
 end
 function E:PaintBindingStatus(cell,status)
@@ -87,6 +91,7 @@ function E:PaintBindingStatus(cell,status)
         f.time=self:Text(f,10); f.time:SetPoint("CENTER",f,"CENTER",0,0); f.time:SetJustifyH("CENTER")
         f.badge=f:CreateTexture(nil,"OVERLAY"); f.badge:SetTexture("Interface\\AddOns\\EasyCast\\Media\\Self")
         f.badge:SetPoint("TOPRIGHT",f,"TOPRIGHT",2,2)
+        f.manaBadge=self:CreateManaBadge(f); f.manaBadge:Hide()
     end
     local f=cell.statusLayer; local size=cell.icon:GetWidth()
     f:ClearAllPoints(); f:SetPoint("TOPLEFT",cell.icon,"TOPLEFT",0,0); f:SetWidth(size); f:SetHeight(size)
@@ -94,13 +99,17 @@ function E:PaintBindingStatus(cell,status)
     f.time:SetFont(E:FontPath(),math.max(8,math.min(12,size*.65)),"OUTLINE")
     f.time:SetWidth(size+4); f.time:SetHeight(size); f.badge:SetWidth(math.max(8,math.min(12,size*.6))); f.badge:SetHeight(math.max(8,math.min(12,size*.6)))
     status=status or {}; cell.spellStatus=status
+    self:SizeManaBadge(f.manaBadge,math.max(8,math.min(12,size*.6)))
+    f.manaBadge:SetFrameStrata(f:GetFrameStrata()); f.manaBadge:SetFrameLevel(f:GetFrameLevel()+1)
     if cell.icon.SetDesaturated then cell.icon:SetDesaturated(status.invalid and true or false) end
     cell.icon:SetVertexColor(1,1,1)
     cell.icon:SetAlpha(status.invalid and .3 or 1)
-    if status.reason then
+    if status.reason=="Mana" then f.badge:Hide(); f.manaBadge:Show()
+    elseif status.reason then
+        f.manaBadge:Hide()
         f.badge:SetTexture("Interface\\AddOns\\EasyCast\\Media\\"..status.reason)
         f.badge:SetVertexColor(1,.48,.48,1); f.badge:Show()
-    else f.badge:Hide() end
+    else f.badge:Hide(); f.manaBadge:Hide() end
     local cd=status.cooldown
     if cd then
         f.shade:Show(); f.time:SetText(cd.remaining>=60 and math.ceil(cd.remaining/60).."m" or tostring(math.ceil(cd.remaining))); f.time:Show()

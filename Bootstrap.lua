@@ -45,6 +45,8 @@ events:RegisterEvent("PLAYER_LOGIN")
 events:RegisterEvent("SPELLS_CHANGED")
 events:RegisterEvent("PLAYER_ENTERING_WORLD")
 events:RegisterEvent("PARTY_MEMBERS_CHANGED")
+events:RegisterEvent("PLAYER_AURAS_CHANGED")
+events:RegisterEvent("UNIT_INVENTORY_CHANGED")
 events:SetScript("OnEvent",function(a,b,c,d,e,f,g)
     local ev=b or event
     if ev=="PLAYER_LOGIN" or (ev=="PLAYER_ENTERING_WORLD" and not E.initialized) then E:Initialize() end
@@ -55,6 +57,8 @@ events:SetScript("OnEvent",function(a,b,c,d,e,f,g)
     if ev=="SPELLS_CHANGED" then
         E:TestLog("ZAUBERBUCH", "SPELLS_CHANGED; laufende Eingabe bleibt erhalten")
         E:RefreshSpells(); E:UpdateContextBindings(); E:RequestDiagnosticActionScan()
+    elseif ev=="PLAYER_AURAS_CHANGED" or (ev=="UNIT_INVENTORY_CHANGED" and (c or arg1)=="player") then
+        E:InvalidateManaCosts()
     elseif ev=="PARTY_MEMBERS_CHANGED" or ev=="PLAYER_ENTERING_WORLD" then
         if ev=="PLAYER_ENTERING_WORLD" then E:StopMiniTest() end
         E:ScanFrames(); E:CancelWorldClicks("Gruppen-/Weltwechsel")

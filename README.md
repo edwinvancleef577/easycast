@@ -15,7 +15,7 @@ EasyCast assigns spells and actions to mouse buttons, the mouse wheel and additi
 - Self-cast and bypass modifiers, selectable under Options.
 - Named profiles and copying bindings between modifiers within the same target type.
 - Compact binding hints: a separate tooltip or icons integrated into the WoW unit tooltip.
-- Cooldown displays, range feedback where supported, and indicators for detected self-only spells.
+- Cooldown displays, insufficient-mana feedback, range feedback where supported, and indicators for detected self-only spells.
 - Independent visibility and positioning for Friendly / World, Hostile / World, Friendly / Unit frames and Hostile / Unit frames.
 - Minimap settings button and optional diagnostics.
 - Interface languages: English, German, French, Spanish, Brazilian Portuguese, Russian, Korean and Simplified Chinese.
@@ -75,7 +75,7 @@ Choose a different bypass modifier, such as **Alt**. Hold it **before clicking**
 
 Choose a shared tooltip style, layout, icon size, spacing and input labels. Then select one of the four friendly/hostile and world/unit-frame contexts to adjust visibility and positioning. Standard WoW unit tooltips can be switched independently for each context.
 
-Range and target restrictions use faded, desaturated spell icons with a small reason indicator. A self-only symbol marks detected self-cast restrictions; range arrows appear when the available data supports them. An unknown range is not treated as a confirmed out-of-range result.
+Range and target restrictions use faded, desaturated spell icons with a small reason indicator. A self-only symbol marks detected self-cast restrictions; range arrows appear when the available data supports them. A small light-red droplet means insufficient mana: the spell icon becomes grey and 70% transparent until enough mana returns. Mana checks use the exact learned rank and work without action-bar slots, using a direct client check or the localized spell-tooltip cost. Unavailable cost or range information is kept unknown. Self-only and range warnings take priority when several restrictions apply.
 
 ### 5. Save a profile
 
