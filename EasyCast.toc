@@ -2,7 +2,7 @@
 ## Title: EasyCast
 ## Notes: Click casting on existing unit frames. Independent friendly and hostile binding hints.
 ## Author: VanCleef
-## Version: 0.7.38-alpha
+## Version: 0.7.39-alpha
 ## SavedVariablesPerCharacter: EasyCastDB
 ## OptionalDeps: DragonflightUI-Reforged, DragonForgeUI, DragonflightUI, ShaguTweaks, EasyThreat
 Core.lua
@@ -29,6 +29,7 @@ NativeTooltip.lua
 TipLayout.lua
 Tips.lua
 Probe.lua
+SpellSuggestions.lua
 Settings.lua
 Test.lua
 CastDiagnostics.lua

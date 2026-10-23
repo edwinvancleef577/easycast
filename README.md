@@ -46,7 +46,7 @@ When updating manually, close the game and replace the addon folder. Keep your S
 
 ### 1. Assign spells
 
-Open **Casting**, choose **Friendly** or **Hostile**, then choose a modifier. Enter a learned spell name exactly as it appears in your game client, or drag a spell icon into a row. Press Enter or leave the field to save it.
+Open **Casting**, choose **Friendly** or **Hostile**, then choose a modifier. Start typing a learned spell name to see matching spells with icons. Click a suggestion or press Tab to accept the first match. Bare names use the highest learned rank; type `(` after the name to find a specific rank. You can also drag a spell icon into a row. Press Enter or leave the field to save typed names.
 
 The row's type selector also supports macros, items, action-bar slots and target actions. Additional keys, including function keys, can be added to the list. Native WoW raid-target marker bindings retain priority over EasyCast.
 
@@ -89,7 +89,7 @@ Basic casting has a Vanilla fallback and does not require SuperWoW. Optional cli
 
 - **Range without action-bar buttons:** supported when the client exposes a suitable spell-range API. The stock fallback requires a matching spell/rank in an action slot and only applies to the selected target. The action-bar button itself does not have to be visible.
 - **Own character in the world:** some clients do not expose a mouseover unit for the player's model. Use the self-cast modifier in that case.
-- **Changing game language:** changing the EasyCast menu language does not translate spell names. When genuine spell IDs are available, load the addon in the old game language and log out or reload before changing the game language. Existing foreign-language bindings without a stored ID may need reassignment.
+- **Changing game language:** changing the EasyCast menu language does not translate spell names. Bindings and saved profiles now retain genuine spell IDs when the client exposes them through the spellbook, name lookup or spell hyperlinks. This preserves spell identity, icons and rank selection across client-language changes. Before changing language, load this version in the old game language, then log out or reload to save migrated bindings. A stock client without any spell-ID API cannot reliably translate previously saved names; already foreign-language bindings without an ID may still need one-time reassignment.
 - **Macros and actions:** execution depends on the APIs and restrictions of the client. EasyCast does not automatically retry a failed cast through another execution path.
 - **Diagnostics:** detailed reports and experimental test windows currently use German. A logged API return does not by itself prove a successful spell cast.
 

@@ -117,6 +117,7 @@ function E:BindingModifierChoices()
 end
 function E:RefreshRows()
     if not self.bindingScroll then return end
+    self.refreshingBindings=true; self:HideSpellSuggestions()
     if self:ReservedHostileModifier(self.bindModifier) then self.bindModifier="" end
     self.kindDropdown:Refresh(); self.modDropdown:Refresh()
     local buttons=self:InputButtons()
@@ -138,6 +139,7 @@ function E:RefreshRows()
     local height=math.max(self.bindingViewHeight,table.getn(buttons)*60); self.bindingChild:SetHeight(height)
     self.scrollMax=math.max(0,height-self.bindingViewHeight); self:ScrollBindings(0)
     self:RefreshCopyControls()
+    self.refreshingBindings=nil
 end
 function E:ModifierLabel(value)
     return value=="" and self:L("Ohne Zusatztaste") or string.gsub(self:KeyLabel(value),"%+$","")
@@ -177,6 +179,7 @@ function E:SaveRow(r)
     else r.status:SetText(r.actionType=="macro" and E:L("Makroname nicht gefunden · bisherige Belegung bleibt") or r.actionType=="slot" and E:L("Aktionsplatz 1 bis 120 eingeben · bisherige Belegung bleibt") or E:L("Spruch nicht gelernt · bisherige Belegung bleibt")); r.status:SetTextColor(1,.5,.38) end
 end
 function E:ScrollBindings(delta)
+    self:HideSpellSuggestions()
     local value=math.max(0,math.min(self.scrollMax or 0,(self.bindingScroll:GetVerticalScroll() or 0)-delta*45))
     self.bindingScroll:SetVerticalScroll(value)
     local bar=getglobal("EasyCastBindingScrollScrollBar")
@@ -200,6 +203,7 @@ function E:CreateBindingRow(i)
     r.action.helpText=E:L("Wählt eine Zielaktion: auswählen, das Ziel unterstützen, ihm folgen oder die aktuelle Auswahl aufheben.")
     r.edit:SetScript("OnEnterPressed",function() r.edit:ClearFocus() end)
     E:SetEditFocusLost(r.edit,function() E:SaveRow(r) end)
+    E:AttachSpellSuggestions(r)
     local function receive()
         local payload=E:CursorBinding()
         if payload and E:SetAction(r.kind,r.key,payload) then

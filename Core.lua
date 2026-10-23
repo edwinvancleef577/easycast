@@ -1,5 +1,5 @@
 -- Independent implementation; no Puppeteer source or artwork is included.
-EasyCast = {version="0.7.38-alpha", frames={}, spells={}, spellList={}, buttons={
+EasyCast = {version="0.7.39-alpha", frames={}, spells={}, spellList={}, buttons={
     {"LeftButton","Links"}, {"RightButton","Rechts"}, {"MiddleButton","Mitte"},
     {"Button4","Maus 4"}, {"Button5","Maus 5"}, {"MOUSEWHEELUP","Rad hoch"}, {"MOUSEWHEELDOWN","Rad runter"}},
     modifiers={"", "SHIFT-", "CTRL-", "ALT-", "CTRL-SHIFT-", "ALT-SHIFT-", "ALT-CTRL-", "ALT-CTRL-SHIFT-"}}
@@ -173,7 +173,7 @@ function E:RefreshSpells()
         if not IsPassiveSpell or not IsPassiveSpell(i,BOOKTYPE_SPELL or "spell") then
             rank=rank or ""
             local full=name..(rank~="" and "("..rank..")" or "")
-            local entry={name=name,rank=rank,cast=full,slot=i,spellID=self:ReadSpellID(id,full),
+            local entry={name=name,rank=rank,cast=full,slot=i,spellID=self:ReadSpellID(id,full,i),
                 icon=GetSpellTexture and GetSpellTexture(i,BOOKTYPE_SPELL or "spell")}
             -- The basic melee action has a stable icon even when the client or
             -- a spellbook replacement supplies an empty/unusable texture.
@@ -201,6 +201,7 @@ function E:RefreshSpells()
     self.spellBookRetryCount=iconsPending and (self.spellBookRetryCount or 0)+1 or 0
     self.spellRestrictions={}; self.spellStatusQueue={}; self.spellRangeLimits={}
     self:RememberSpellIdentities()
+    self:MigrateSpellBindings()
     -- SPELLS_CHANGED can follow login/reload. Update question-mark icons without
     -- overwriting a name that the user is currently entering in the settings.
     for _,row in ipairs(self.bindingRows or {}) do
@@ -221,7 +222,8 @@ function E:SetBinding(kind,key,text)
         return true
     end
     if not self:Resolve(text) then return false end
-    self.db.bindings[kind][key]=text
+    local action=self:SpellAction(text)
+    self.db.bindings[kind][key]=action.spellID and action or text
     if self.initialized and self.RefreshWorldBindings then self:RefreshWorldBindings() end
     return true
 end

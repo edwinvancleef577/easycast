@@ -4,10 +4,12 @@ E.actionChoices={{"target","Ziel wählen"},{"assist","Unterstützen"},{"follow",
 function E:BindingLabel(value)
     local text=type(value)=="table" and value.value or value
     if type(value)~="table" or value.type=="spell" then
-        local info=self:Resolve(text)
+        local info=self:Resolve(value)
         if info then
             local alias=self.db.spellAliases[string.lower(self:Trim(text))]
-            return ((alias and alias.highest) or string.lower(self:Trim(text))==string.lower(info.name)) and info.name or info.cast
+            local highest=type(value)=="table" and value.spellID and value.highest
+            if type(value)~="table" or not value.spellID then highest=(alias and alias.highest) or string.lower(self:Trim(text))==string.lower(info.name) end
+            return highest and info.name or info.cast
         end
     end
     return tostring(text or "")
@@ -41,7 +43,7 @@ end
 function E:BindingInfo(value)
     if type(value)~="table" then return self:Resolve(value) end
     local kind,name=value.type,value.value
-    if kind=="spell" then return self:Resolve(name) end
+    if kind=="spell" then return self:ResolveSpellIdentity(value) end
     if kind=="macro" then
         local i=self:MacroIndex(name)
         if i then local n,icon=GetMacroInfo(i); return {name=n,icon=icon,index=i} end
@@ -57,7 +59,7 @@ end
 function E:SetAction(kind,key,action)
     if action and (not action.value or self:Trim(action.value)=="") then action=nil end
     if action and not self:BindingInfo(action) then return false end
-    self.db.bindings[kind][key]=self:Copy(action)
+    self.db.bindings[kind][key]=action and self:SpellAction(action) or nil
     self:CancelWorldClicks("Belegung geändert")
     if self.initialized then self:RefreshWorldBindings() end
     return true
@@ -80,7 +82,7 @@ function E:WithUnit(unit,callback)
 end
 function E:Cast(unit,value)
     if type(value)~="table" then return self:CastSpell(unit,value) end
-    if value.type=="spell" then return self:CastSpell(unit,value.value) end
+    if value.type=="spell" then return self:CastSpell(unit,value) end
     if self:TestSuppressCast() then self:TestLog("TROCKENTEST",self:BindingLabel(value)); return false end
     if self.worldBlocked or not unit or not UnitExists(unit) then return false end
     local info=self:BindingInfo(value); if not info then return false end
