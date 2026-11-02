@@ -6,6 +6,20 @@ EasyCast assigns spells and actions to mouse buttons, the mouse wheel and additi
 
 **Version:** 0.7.38-alpha · **Author:** VanCleef
 
+## Screenshots
+
+### Settings
+
+![EasyCast settings](https://raw.githubusercontent.com/edwinvancleef577/easythreat/main/EasyThreat/GithubImages/easycast_menu.png)
+
+### Tooltip integration with EasyThreat
+
+![EasyCast spell hints alongside EasyThreat bars](https://raw.githubusercontent.com/edwinvancleef577/easythreat/main/EasyThreat/GithubImages/aggro%20und%20quickcast.png)
+
+### In-game overview
+
+![EasyCast and EasyThreat in the game interface](https://raw.githubusercontent.com/edwinvancleef577/easythreat/main/EasyThreat/GithubImages/fullscreen.png)
+
 ## Features
 
 - Separate friendly and hostile bindings, with Shift, Ctrl, Alt and their combinations.
